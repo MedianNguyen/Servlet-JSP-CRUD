@@ -87,4 +87,23 @@ public class UserCRUD {
         }
         return result;
     }
+
+    public void createNewUser(User newUser) {
+        try {
+            Connection connection = DBUtility.getConnection();
+            String insertQuery = "INSERT INTO USER  (USERNAME ,PASSWORD , NAME , ROLE, ID) VALUES"
+                    + "(?,?,?,?,?)";
+            
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+            
+            preparedStatement.setString(1, newUser.getUsername());
+            preparedStatement.setString(2, newUser.getPassword());
+            preparedStatement.setString(3, newUser.getName());
+            preparedStatement.setString (4, newUser.getRole());
+            preparedStatement.setInt(5, newUser.getID());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserCRUD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

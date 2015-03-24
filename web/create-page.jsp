@@ -1,6 +1,6 @@
 <%-- 
-    Document   : edit-page
-    Created on : Mar 24, 2015, 1:39:18 PM
+    Document   : create-page
+    Created on : Mar 24, 2015, 3:42:46 PM
     Author     : Median
 --%>
 
@@ -14,34 +14,29 @@
     </head>
     <body>
        
-        <% User u = (User) request.getAttribute("user"); %>
-         <h1>Hello  <%= u.getUsername() %>!</h1>
-        
-        <form action="User?action=update" method="post" >            
+        <form action="User?action=create" method="post" >            
             <table >
                 <tbody>                            
-                    <tr><td>ID</td> 
-                        <td><input name="uid" type="text" value="<%= u.getID()%>" readOnly /> </td>                      
-                    </tr>
+                    
                     <tr> 
                         <td>Name:</td>                       
-                        <td><input name="name" type="text" value="<%= u.getName()%>" /> </td>
+                        <td><input name="name" type="text" " /> </td>
                     </tr>
                     <tr> 
                         <td>Username:</td>                       
-                        <td><input name="username" type="text" value="<%= u.getUsername()%>" /> </td>
+                        <td><input name="username" type="text"  /> </td>
                     </tr>
                     <tr> 
                         <td>Password</td>                        
-                        <td><input name="password" type="text" value="<%= u.getPassword()%>" /></td>
+                        <td><input name="password" type="text"  /></td>
                     </tr>
                     <tr>
                         <td> Role </td>
-                        <td><input name="role" type="text" value="<%= u.getRole()%>" /></td>                        
+                        <td><input name="role" type="text"  /></td>                        
                     </tr>
                     
                     <tr>
-                        <td colspan="2" ><input type="submit" value="Update"/></td>
+                        <td colspan="2" ><input type="submit" value="Create"/></td>
                     </tr>
                 </tbody>
                 </table>          

@@ -16,7 +16,7 @@
     <body>
         
         
-        <div> <h1>Add new User</h1></div>
+        <div> <h1><a href="create-page.jsp"> Add new User </a></h1></div>
         <div> <h1> All users </h1>
             <% ArrayList<User> allUsers = (ArrayList) request.getAttribute("allUsers"); %>
             <div>

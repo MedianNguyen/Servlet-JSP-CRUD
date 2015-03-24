@@ -9,6 +9,7 @@ import db.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,27 +40,51 @@ public class UserController extends HttpServlet {
         String action = request.getParameter("action");
         String id = request.getParameter("id");
         UserCRUD userUD = new UserCRUD();
+        ArrayList<User> allUsers = null;
+        try {
+            allUsers = userUD.getAllUsers();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Enumeration<String> attributeNames = request.getAttributeNames();
         System.out.println(attributeNames.toString());
-        if(action.equals("edit")){
-            
+        
+        if(action.equals("create")){
+            try {
+                String username = request.getParameter("username");
+                String pass = request.getParameter("password");
+                String name = request.getParameter("name");
+                String role = request.getParameter("role");
+                int newID =  userUD.getAllUsers().size()+1;
+                User newUser = new User(newID, username, pass, name, role);
+                userUD.createNewUser(newUser);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            RequestDispatcher rd = request.getRequestDispatcher("crud-page.jsp");
+            request.setAttribute("allUsers", allUsers);
+            rd.forward(request, response);
+        }
+        
+        if(action.equals("edit")){            
             User user = userUD.getUser(Integer.parseInt(id));
             RequestDispatcher rd = request.getRequestDispatcher("/edit-page.jsp");
             request.setAttribute("user", user);
             rd.forward(request, response);
         }
         
-        if(action.equals("update")){
-            
+        if(action.equals("update")){            
             String username = request.getParameter("username");
             String pass = request.getParameter("password");
             String name = request.getParameter("name");
             String role = request.getParameter("role");
-            //int uid = Integer.parseInt(request.getParameter("uid"));
-            
-            User editedUser = new User(1, username, pass, name, role);
+            int uid = Integer.parseInt(request.getParameter("uid"));            
+            User editedUser = new User(uid, username, pass, name, role);
             userUD.updateUser(editedUser);
-            response.sendRedirect("/index.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("crud-page.jsp");
+            request.setAttribute("allUsers", allUsers);
+            rd.forward(request, response);
         }
         
         if(action.equals("delete")){
