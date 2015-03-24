@@ -14,12 +14,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello  <div> <%= request.getAttribute("currentUser") %></div> 
-            <%= request.getAttribute("username") %>
-        </h1>
         
-        <div> Add new User</div>
-        <div> All users 
+        
+        <div> <h1>Add new User</h1></div>
+        <div> <h1> All users </h1>
             <% ArrayList<User> allUsers = (ArrayList) request.getAttribute("allUsers"); %>
             <div>
                 <table style="border: 1px solid black;" cellpadding="6" cellspacing="0">
@@ -35,8 +33,8 @@
                         <td><%= u.getUsername()%></td>
                         <td><%= u.getPassword()%></td>
                         <td><%= u.getRole()%></td>
-                        <td><a href="User?" > Edit </a></td>
-                        <td><a href="User" > Delete </a></td>
+                        <td><a href="User?action=edit&id=<%= u.getID()%>" > Edit </a></td>
+                        <td><a href="User?action=delete&id=<%= u.getID()%>" > Delete </a></td>
                     </tr>                       
                 
                 <% } %>

@@ -5,12 +5,19 @@
  */
 package controller;
 
+import db.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.UserCRUD;
 
 /**
  *
@@ -28,7 +35,48 @@ public class UserController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {        
+        String action = request.getParameter("action");
+        String id = request.getParameter("id");
+        UserCRUD userUD = new UserCRUD();
+        Enumeration<String> attributeNames = request.getAttributeNames();
+        System.out.println(attributeNames.toString());
+        if(action.equals("edit")){
+            
+            User user = userUD.getUser(Integer.parseInt(id));
+            RequestDispatcher rd = request.getRequestDispatcher("/edit-page.jsp");
+            request.setAttribute("user", user);
+            rd.forward(request, response);
+        }
+        
+        if(action.equals("update")){
+            
+            String username = request.getParameter("username");
+            String pass = request.getParameter("password");
+            String name = request.getParameter("name");
+            String role = request.getParameter("role");
+            //int uid = Integer.parseInt(request.getParameter("uid"));
+            
+            User editedUser = new User(1, username, pass, name, role);
+            userUD.updateUser(editedUser);
+            response.sendRedirect("/index.jsp");
+        }
+        
+        if(action.equals("delete")){
+            
+            boolean isDeleted = userUD.deleteUser(Integer.parseInt(id));
+            if(!isDeleted){
+                request.setAttribute("error", "Something wrong! Can't delete user");
+            }
+            try {
+                request.setAttribute("allUsers",userUD.getAllUsers());
+            } catch (SQLException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            RequestDispatcher rd = request.getRequestDispatcher("/crud-page.jsp");            
+            rd.forward(request, response);
+        }
+                
         
     }
 

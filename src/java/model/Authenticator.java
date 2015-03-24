@@ -45,8 +45,8 @@ public class Authenticator {
             st.setString(1, username);            
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-             return  new User(rs.getInt("id"), username, rs.getString("password"),
-                        rs.getString("name"), rs.getString("role"));
+                return  new User(rs.getInt("id"), username, rs.getString("password"),
+                                rs.getString("name"), rs.getString("role"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Authenticator.class.getName()).log(Level.SEVERE, null, ex);
