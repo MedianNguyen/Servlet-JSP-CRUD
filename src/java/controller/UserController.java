@@ -7,7 +7,6 @@ package controller;
 
 import db.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -55,7 +54,8 @@ public class UserController extends HttpServlet {
                 String pass = request.getParameter("password");
                 String name = request.getParameter("name");
                 String role = request.getParameter("role");
-                int newID =  userUD.getAllUsers().size()+1;
+                ArrayList<User> allUsers1 = userUD.getAllUsers();
+                int newID =  allUsers1.get(allUsers1.size()-1).getID()+1;
                 User newUser = new User(newID, username, pass, name, role);
                 userUD.createNewUser(newUser);
                 
@@ -63,7 +63,11 @@ public class UserController extends HttpServlet {
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
             RequestDispatcher rd = request.getRequestDispatcher("crud-page.jsp");
-            request.setAttribute("allUsers", allUsers);
+            try {
+                request.setAttribute("allUsers", userUD.getAllUsers());
+            } catch (SQLException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             rd.forward(request, response);
         }
         
@@ -82,8 +86,12 @@ public class UserController extends HttpServlet {
             int uid = Integer.parseInt(request.getParameter("uid"));            
             User editedUser = new User(uid, username, pass, name, role);
             userUD.updateUser(editedUser);
-            RequestDispatcher rd = request.getRequestDispatcher("crud-page.jsp");
-            request.setAttribute("allUsers", allUsers);
+            RequestDispatcher rd = request.getRequestDispatcher("/crud-page.jsp");
+            try {
+                request.setAttribute("allUsers", userUD.getAllUsers());
+            } catch (SQLException ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             rd.forward(request, response);
         }
         
